@@ -1,0 +1,17 @@
+production:
+  access_key_id: AKIAIDK3QHJFN3NZGWBQ
+  secret_access_key: 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
+  bucket: redhero-prod
+  endpoint:
+  secure:
+  private:
+  expires:
+
+development:
+  access_key_id: AKIAIDK3QHJFN3NZGWBQ
+  secret_access_key: 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
+  bucket: redhero-prod
+  endpoint:
+  secure:
+  private:
+  expires: 
