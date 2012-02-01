@@ -1,6 +1,6 @@
 production:
-  access_key_id: AKIAIDK3QHJFN3NZGWBQ
-  secret_access_key: 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
+  access_key_id: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  secret_access_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   bucket: redhero-prod
   endpoint:
   secure:
@@ -8,8 +8,8 @@ production:
   expires:
 
 development:
-  access_key_id: AKIAIDK3QHJFN3NZGWBQ
-  secret_access_key: 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
+  access_key_id: xxxxxxxxxxxxxxxxxxxxxxxxx
+  secret_access_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   bucket: redhero-prod
   endpoint:
   secure:
