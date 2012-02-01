@@ -1,0 +1,112 @@
+Source: http://errorhole.blogspot.com/2011/12/setting-up-redmine-12-on-heroku-with.html
+
+Setting up redmine 1.2 on heroku with redmine_s3 plugin
+
+Tested system cnfg: Ubunut Lucid 10.04.3 LTS
+Libraries Requirements: Essential libraries and rvm installed ( Refer the post with title “setting up a naked bare m/c and then view this post…Don’t start doing something else  )
+0) rvm rubygems 1.4.2
+1) rvm install ruby-1.8.7-p334
+2) rvm use ruby-1.8.7-p334 ( Still thinking about the photo! Few more commands dude, c’mon not now  )
+3) rvm gemset create rails-2-3-11
+4) rvm gemset use rails-2-3-11
+5) sudo gem install rails -v=2.3.11 / sudo gem install rails -v=2.3.11 –no-ri –no-rdoc ( For all the Indians who bought cheap systems and don’t have hard disk space a.k.a BPL )
+6) sudo gem install rake -v=0.8.7
+7) sudo gem install bundle
+8) svn co http://redmine.rubyforge.org/svn/branches/1.2-stable redmine-1.2
+9) find ./ -regex ‘.*svn’ -exec sudo rm -r {} \; ( Dont panic if it show a long list of ‘not found’ )
+10) Create a file with name ‘Gemfile’ in your application directory with follwing contents (if you have followed this post correctly so far the directory name would be “redmine-1.2. and you are already into it if you didn’t get any error.)
+==============================================================
+source :gemcutter
+
+gem "pg"
+gem "rake", "0.8.7"
+gem "rails", "2.3.11"
+gem "rack", "1.1.1"
+gem "i18n", "0.4.2"
+=============================================================
+Note: Dont copy the "======"  11) bundle install
+12) cp config/database.yml.example config/database.yml
+13) Edit your config/database.yml to look like following:
+=====================================================================
+# MySQL (default setup).
+
+production:
+  adapter: postgresql
+  database: redmine_heroku
+  host: localhost
+  username: postgres
+  password: postgres
+#  adapter: mysql
+#  database: redmine
+#  host: localhost
+#  username: root
+#  password:
+#  encoding: utf8
+
+development:
+  adapter: postgresql
+  database: redmine_heroku
+  host: localhost
+  username: postgres
+  password: postgres
+#  adapter: mysql
+#  database: redmine_development
+#  host: localhost
+#  username: root
+#  password:
+#  encoding: utf8
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adapter: mysql
+  database: redmine_test
+  host: localhost
+  username: root
+  password:
+  encoding: utf8
+
+test_pgsql:
+  adapter: postgresql
+  database: redmine_test
+  host: localhost
+  username: postgres
+  password: "postgres"
+
+test_sqlite3:
+  adapter: sqlite3
+  database: db/test.sqlite3
+===============================================================
+14) rake generate_session_store
+15) Add following line in your config/environment.rb before last line i.e before "end"
+===============================================================
+****Here key is the key from "config/initializers/session_store.rb"
+Here secret is the secret
+from "config/initializers/session_store.rb"
+Example: ****
+config.action_controller.session = { :key => "_redmine_session", :secret => "56acb9c4c9e6165ad25a8f747e014b54eb219a6e7db2a549a0178ddc4bc73e68b16314c4054c7595" }
+
+16a) RAILS_ENV=production rake db:migrate
+16b) RAILS_ENV=production rake redmine:load_default_data
+17) gem install heroku / sudo gem install heroku
+18) heroku create redmine-manoj --stack bamboo-ree-1.8.7 --remote redmine-manoj
+19) find ./ -regex '.*~' -exec sudo rm {} \;
+20) git init
+21) git add .
+22) git commit -m "your commit message"
+23) git remote add redmine git@heroku.com:redmine-manoj.git
+24) git push redmine master
+25a) sudo gem install taps
+25b) heroku db:push ( When promted to enter your repository name on heroku, enter the correct name from step 18, in this example it will be redmine-manoj ))
+26) git clone https://github.com/tigrish/redmine_s3 vendor/plugins/redmine_s3
+27) cp vendor/plugins/redmine_s3/config/s3.yml.example config/s3.yml
+28) Enter your S3 credentials in config/s3.yml created in step 27
+29) git add config/s3.yml vendor/plugins/redmine_s3/
+30) git commit -m "Add s3 support"
+31) git push redmine master
+32) Test by creating a project and uploading files.
+If you face any issues the author is very willing to help, If you think this post can be improved further go on and give feedback.
+http://errorhole.blogspot.com/2011/12/setting-up-redmine-12-on-heroku-with.html
+Issues encountered:
+http://www.redmine.org/boards/3/topics/8497?page=2
